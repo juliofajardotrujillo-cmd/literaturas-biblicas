@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Acceso Rápido</title>
+
+  <!-- =====================================================
+       META TAGS PARA PWA EN ANDROID / CHROME / EDGE
+       ===================================================== -->
+  <meta name="theme-color" content="#4caf87" />
+  <meta name="mobile-web-app-capable" content="yes" />
+
+  <!-- =====================================================
+       META TAGS ESPECÍFICAS PARA iOS / SAFARI
+       Apple no soporta beforeinstallprompt, así que estas
+       metas permiten que la app se vea correctamente cuando
+       el usuario la añade a pantalla de inicio manualmente.
+       ===================================================== -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Acceso Rápido" />
+
+  <!-- Icono para iOS (touch icon) -->
+  <link rel="apple-touch-icon" href="icons/icon-180.png" />
+
+  <!-- Splash screens para iOS (opcionales pero recomendados) -->
+  <!-- Puedes generar estos con herramientas como https://appsco.pe/developer/splash-screens -->
+
+  <!-- =====================================================
+       MANIFEST: define cómo se comporta la app instalada
+       ===================================================== -->
+  <link rel="manifest" href="manifest.webmanifest" />
+
+  <!-- Favicon estándar -->
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
+
+  <!-- Hoja de estilos -->
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Google Fonts: Nunito (moderna, redondeada, legible) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- =====================================================
+       FONDO CON PATRÓN DECORATIVO
+       ===================================================== -->
+  <div class="bg-pattern" aria-hidden="true"></div>
+
+  <!-- =====================================================
+       MODAL PRINCIPAL - se muestra u oculta según el contexto
+       ===================================================== -->
+  <main class="modal-wrapper" id="modalWrapper" role="main" aria-live="polite">
+
+    <!-- TARJETA / CARD -->
+    <div class="card" id="mainCard">
+
+      <!-- Ícono circular superior -->
+      <div class="card-icon-wrapper" aria-hidden="true">
+        <div class="card-icon-circle">
+          <!-- Ícono SVG de instalación / descarga -->
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+               class="card-icon-svg" aria-hidden="true">
+            <path d="M12 2v13M7 10l5 5 5-5"/>
+            <path d="M3 18h18"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Título -->
+      <h1 class="card-title" id="cardTitle">Añadir a pantalla de inicio</h1>
+
+      <!-- Subtítulo descriptivo (se cambia según la plataforma) -->
+      <p class="card-subtitle" id="cardSubtitle">
+        Instala esta app en tu dispositivo para acceder de forma rápida y cómoda, sin abrir el navegador.
+      </p>
+
+      <!-- Fila de iconos ilustrativos -->
+      <div class="card-icons-row" aria-hidden="true">
+        <!-- Ícono: smartphone -->
+        <div class="icon-pill">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+            <line x1="12" y1="18" x2="12.01" y2="18"/>
+          </svg>
+        </div>
+        <!-- Ícono: tablet -->
+        <div class="icon-pill">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="2" width="16" height="20" rx="2" ry="2"/>
+            <line x1="12" y1="18" x2="12.01" y2="18"/>
+          </svg>
+        </div>
+        <!-- Ícono: monitor / escritorio -->
+        <div class="icon-pill">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+            <line x1="8" y1="21" x2="16" y2="21"/>
+            <line x1="12" y1="17" x2="12" y2="21"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Texto informativo adicional (para iOS, muestra instrucciones; para otros, texto genérico) -->
+      <p class="card-info" id="cardInfo">
+        Disponible en Android, iOS, Windows y macOS.
+      </p>
+
+      <!-- Botón principal -->
+      <button class="btn-primary" id="btnAction" type="button">
+        INSTALAR APP
+      </button>
+
+      <!-- Botón secundario para saltar la instalación e ir directo -->
+      <button class="btn-skip" id="btnSkip" type="button">
+        Continuar sin instalar
+      </button>
+
+    </div><!-- /card -->
+
+    <!-- Indicador de carga (mientras redirige) -->
+    <div class="loading-overlay" id="loadingOverlay" aria-hidden="true" style="display:none;">
+      <div class="spinner"></div>
+      <p class="loading-text">Abriendo la aplicación…</p>
+    </div>
+
+  </main><!-- /modal-wrapper -->
+
+  <!-- =====================================================
+       SCRIPT PRINCIPAL
+       Se carga al final del body para no bloquear el render
+       ===================================================== -->
+  <script src="app.js"></script>
+
+</body>
+</html>
