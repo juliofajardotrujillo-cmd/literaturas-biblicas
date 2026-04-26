@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <base target="_top" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestión de Registro de Pastores</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary-fixed-dim": "#53dea5",
+                      "surface-dim": "#d8dadb",
+                      "on-primary-container": "#00422c",
+                      "tertiary-fixed": "#d4e6e5",
+                      "surface-tint": "#006c4a",
+                      "secondary-fixed": "#c1e9f5",
+                      "on-secondary-fixed-variant": "#254c55",
+                      "surface-bright": "#f8fafb",
+                      "on-primary-fixed-variant": "#005237",
+                      "on-primary": "#ffffff",
+                      "outline-variant": "#bbcac0",
+                      "tertiary": "#516161",
+                      "on-tertiary": "#ffffff",
+                      "on-error": "#ffffff",
+                      "surface-container-high": "#e6e8e9",
+                      "surface-container-lowest": "#ffffff",
+                      "inverse-on-surface": "#eff1f2",
+                      "tertiary-container": "#95a6a5",
+                      "on-secondary": "#ffffff",
+                      "surface-container-low": "#f2f4f5",
+                      "surface-container-highest": "#e1e3e4",
+                      "secondary-container": "#c1e9f5",
+                      "surface-container": "#eceeef",
+                      "secondary-fixed-dim": "#a5cdd8",
+                      "on-secondary-container": "#446a74",
+                      "primary-fixed": "#72fbbf",
+                      "on-secondary-fixed": "#001f26",
+                      "primary-container": "#1db983",
+                      "inverse-surface": "#2e3132",
+                      "primary": "#006c4a",
+                      "error": "#ba1a1a",
+                      "on-surface": "#191c1d",
+                      "on-surface-variant": "#3d4a42",
+                      "inverse-primary": "#53dea5",
+                      "background": "#f8f9fa",
+                      "tertiary-fixed-dim": "#b8cac9",
+                      "on-tertiary-fixed": "#0e1e1e",
+                      "on-background": "#191c1d",
+                      "surface": "#f8f9fa",
+                      "error-container": "#ffdad6",
+                      "on-tertiary-fixed-variant": "#3a4a49",
+                      "surface-variant": "#e1e3e4",
+                      "on-primary-fixed": "#002114",
+                      "on-error-container": "#93000a",
+                      "secondary": "#3e646e",
+                      "outline": "#6c7a71",
+                      "on-tertiary-container": "#2c3c3c"
+              },
+              "fontFamily": {
+                      "headline": ["Manrope"],
+                      "body": ["Inter"],
+                      "label": ["Inter"]
+              }
+            },
+          },
+        }
+    </script>
+    <style>
+        .icon {
+            display: inline-block;
+            width: 1em;
+            height: 1em;
+            fill: currentColor;
+            vertical-align: -0.125em;
+            flex-shrink: 0;
+        }
+        .glass-card {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .glass-modal {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+        
+        /* FIX AUTOFILL COLOR */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus, 
+        input:-webkit-autofill:active {
+            -webkit-box-shadow: 0 0 0 30px #ffffff inset !important;
+            -webkit-text-fill-color: #191c1d !important;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+
+        /* Identico al estilo del Formulario: Sin border azul, 8px radius */
+        .input-elevated {
+            background: #ffffff;
+            border: none !important;
+            border-radius: 12px !important;
+            box-shadow: 0 4px 8px -2px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .input-elevated:focus {
+            background: #ffffff;
+            box-shadow: 0 12px 16px -4px rgba(0, 0, 0, 0.15), 0 4px 8px -2px rgba(0, 0, 0, 0.1);
+            outline: none;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes zoomIn {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .animate-in {
+            animation: fadeIn 0.3s ease-out, zoomIn 0.3s ease-out;
+        }
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body class="bg-background font-body text-on-background min-h-screen relative overflow-hidden flex items-center justify-center selection:bg-primary-fixed selection:text-on-primary-fixed">
+
+    <svg style="display: none;" xmlns="http://www.w3.org/2000/svg">
+        <symbol id="icon-person" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></symbol>
+        <!-- Icono Ojito Moderno y Limpio -->
+        <symbol id="icon-visibility" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zm0 12.5c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></symbol>
+        <symbol id="icon-visibility_off" viewBox="0 0 24 24"><path d="M11.83 9L15 12.16V12a3 3 0 0 0-3-3h-.17zm-4.3.8l1.55 1.55c-.05.21-.08.42-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm11.84 9.3l-3.32-3.32c-1.4.67-2.98 1.02-4.66 1.02-4.64 0-8.57-3.01-9.96-7.18.57-1.71 1.58-3.19 2.87-4.31L1.27 2.27l1.27-1.27 18.26 18.26-1.43 1.44zM12 4.5c2.95 0 5.66 1.33 7.42 3.42l1.62-1.62C18.96 4.06 15.68 2.5 12 2.5c-1.8 0-3.51.46-5.02 1.25l1.61 1.61C9.64 4.81 10.79 4.5 12 4.5z"/></symbol>
+        <symbol id="icon-check_circle" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></symbol>
+        <symbol id="icon-arrow_forward" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></symbol>
+        <symbol id="icon-contact_support" viewBox="0 0 24 24"><path d="M11.5 2C6.81 2 3 5.81 3 10.5S6.81 19 11.5 19h.5v3c4.86-2.34 8-7 8-11.5C20 5.81 16.19 2 11.5 2zm1 14.5h-2v-2h2v2zm0-3.5h-2c0-3.25 3-3 3-5 0-1.1-.9-2-2-2s-2 .9-2 2h-2c0-2.21 1.79-4 4-4s4 1.79 4 4c0 2.5-3 2.75-3 5z"/></symbol>
+        <symbol id="icon-call" viewBox="0 0 24 24"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56-.35-.12-.74-.03-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/></symbol>
+        <symbol id="icon-sms" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></symbol>
+        <symbol id="icon-whatsapp" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></symbol>
+    </svg>
+
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="absolute top-[-5%] left-[-10%] w-[50%] h-[50%] bg-emerald-300/30 blur-[100px] rounded-full"></div>
+        <div class="absolute top-[15%] right-[-15%] w-[60%] h-[60%] bg-primary/20 blur-[120px] rounded-full"></div>
+        <div class="absolute bottom-[-15%] left-[10%] w-[45%] h-[45%] bg-emerald-200/40 blur-[90px] rounded-full"></div>
+    </div>
+
+    <main class="relative z-10 w-full max-w-lg px-6 flex items-center justify-center">
+        <div class="glass-card bg-surface/60 w-full p-8 md:p-12 rounded-[24px] shadow-[0_32px_64px_-12px_rgba(0,108,74,0.12)] border border-white/40">
+            <div class="mb-10 text-center">
+                <h1 class="font-headline text-3xl font-bold tracking-tight text-on-surface mb-2" id="pageTitle">Iniciar Sesión</h1>
+                <p class="text-on-surface-variant font-medium" id="pageSubtitle">Acceda a su cuenta para continuar su estudio.</p>
+            </div>
+
+            <form class="space-y-6" onsubmit="return false;">
+                <div class="space-y-2">
+                    <label class="block font-label text-xs font-bold tracking-widest uppercase text-on-surface-variant ml-1" for="userInput">
+                        Nombre y Apellidos
+                    </label>
+                    <!-- Wrapper que se desplaza hacia arriba con el focus -->
+                    <div class="relative group transition-transform duration-300 focus-within:-translate-y-1">
+                        <input 
+                            class="input-elevated w-full p-4 text-on-surface placeholder:text-outline/50 focus:ring-2 focus:ring-primary/10 outline-none" 
+                            id="userInput" 
+                            placeholder="Su nombre completo" 
+                            type="text"
+                        />
+                        <svg class="icon absolute right-4 top-1/2 -translate-y-1/2 text-outline/40 group-focus-within:text-primary transition-colors pointer-events-none !text-2xl"><use href="#icon-person"></use></svg>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center px-1">
+                        <label class="block font-label text-xs font-bold tracking-widest uppercase text-on-surface-variant" for="passInput">
+                            Contraseña
+                        </label>
+                        <a class="text-[11px] font-bold text-primary underline decoration-primary underline-offset-2 hover:text-on-primary-container transition-colors uppercase tracking-tighter" href="#" id="forgotPassword" onclick="showForgotPasswordModal(); return false;">¿Olvidó su clave?</a>
+                    </div>
+                    <!-- Wrapper que se desplaza hacia arriba con el focus -->
+                    <div class="relative group transition-transform duration-300 focus-within:-translate-y-1">
+                        <input 
+                            class="input-elevated w-full p-4 pr-12 text-on-surface placeholder:text-outline/50 focus:ring-2 focus:ring-primary/10 outline-none" 
+                            id="passInput" 
+                            placeholder="••••••••••••" 
+                            type="password"
+                        />
+                        <svg class="icon absolute right-4 top-1/2 -translate-y-1/2 text-outline/40 group-focus-within:text-primary transition-colors cursor-pointer !text-2xl" id="togglePassword" onclick="togglePasswordVisibility()"><use href="#icon-visibility"></use></svg>
+                    </div>
+                </div>
+
+                <div class="space-y-2" id="confirmPasswordGroup" style="display: none;">
+                    <label class="block font-label text-xs font-bold tracking-widest uppercase text-on-surface-variant ml-1" for="confirmPassword">
+                        Confirmar Contraseña
+                    </label>
+                    <!-- Wrapper que se desplaza hacia arriba con el focus -->
+                    <div class="relative group transition-transform duration-300 focus-within:-translate-y-1">
+                        <input 
+                            class="input-elevated w-full p-4 pr-12 text-on-surface placeholder:text-outline/50 focus:ring-2 focus:ring-primary/10 outline-none" 
+                            id="confirmPassword" 
+                            placeholder="••••••••••••" 
+                            type="password"
+                        />
+                        <svg class="icon absolute right-4 top-1/2 -translate-y-1/2 text-outline/40 group-focus-within:text-primary transition-colors cursor-pointer !text-2xl" id="toggleConfirmPassword" onclick="toggleConfirmPasswordVisibility()"><use href="#icon-check_circle"></use></svg>
+                    </div>
+                </div>
+
+                <div class="pt-4">
+                    <button 
+                        class="w-full py-4 rounded-[12px] bg-gradient-to-br from-primary to-primary-container text-on-primary font-headline font-bold text-lg shadow-[0_12px_24px_-6px_rgba(0,108,74,0.3)] hover:shadow-[0_16px_32px_-8px_rgba(0,108,74,0.4)] hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 group"
+                        id="submitBtn"
+                        onclick="procesar()"
+                    >
+                        <span id="submitBtnText">Ingresar al Sistema</span>
+                        <svg class="icon text-xl group-hover:translate-x-1 transition-transform"><use href="#icon-arrow_forward"></use></svg>
+                    </button>
+                </div>
+
+                <div id="msg" class="text-center text-sm font-bold text-on-surface-variant mt-4"></div>
+            </form>
+
+            <footer class="mt-8 text-center">
+                <p class="text-tertiary text-sm font-medium">
+                    <span id="footerQuestion">¿Es nuevo en la plataforma?</span>
+                    <a class="text-primary font-bold underline decoration-primary underline-offset-4 hover:text-on-primary-container transition-all ml-1 cursor-pointer" id="toggleLink" onclick="switchTab()">
+                        <span id="toggleLinkText">Crear una cuenta</span>
+                    </a>
+                </p>
+            </footer>
+                    <p class="mt-8 text-[10px] text-emerald-900/40 font-bold tracking-[0.2em] uppercase" style="text-align: center;">• Plataforma Oficial de Distribución Ministerial </p>
+        </div>
+    </main>
+
+    <div class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 lg:p-8 hidden" id="forgotPasswordModal">
+        <div class="absolute inset-0 bg-on-surface/20 backdrop-blur-sm" onclick="closeForgotPasswordModal()"></div>
+        <div class="glass-modal relative w-full max-w-sm overflow-hidden rounded-[24px] shadow-[0_32px_64px_-12px_rgba(0,0,0,0.15)] flex flex-col border border-white/40 animate-in">
+            <div class="p-8 flex flex-col items-center text-center space-y-6">
+                <div class="w-16 h-16 bg-primary/10 rounded-[16px] flex items-center justify-center text-primary mb-2">
+                    <svg class="icon text-4xl"><use href="#icon-contact_support"></use></svg>
+                </div>
+                
+                <h2 class="text-2xl font-extrabold text-on-surface tracking-tight leading-tight font-headline">Recuperar Clave</h2>
+                <p class="text-sm font-medium text-on-surface-variant leading-relaxed">Por favor, comunicarse con el administrador vía llamada, SMS o WhatsApp:</p>
+
+                <div class="flex gap-4 justify-center w-full">
+                    <a href="tel:+5355953985" class="w-14 h-14 bg-primary/10 rounded-[12px] flex items-center justify-center text-primary hover:bg-primary/20 hover:scale-105 transition-all shadow-sm">
+                        <svg class="icon text-2xl"><use href="#icon-call"></use></svg>
+                    </a>
+                    <a href="sms:+5355953985" class="w-14 h-14 bg-primary/10 rounded-[12px] flex items-center justify-center text-primary hover:bg-primary/20 hover:scale-105 transition-all shadow-sm">
+                        <svg class="icon text-2xl"><use href="#icon-sms"></use></svg>
+                    </a>
+                    <a href="https://wa.me/5355953985" target="_blank" rel="noopener noreferrer" class="w-14 h-14 bg-primary/10 rounded-[12px] flex items-center justify-center text-primary hover:bg-primary/20 hover:scale-105 transition-all shadow-sm">
+                        <svg class="icon text-2xl"><use href="#icon-whatsapp"></use></svg>
+                    </a>
+                </div>
+
+                <div class="pt-4 border-t border-surface-variant/30 w-full">
+                    <p class="text-lg font-extrabold text-emerald-950">+53 55953985</p>
+                </div>
+            </div>
+            
+            <div class="px-8 py-6 border-t border-white/20 shrink-0 flex justify-center">
+                <button class="w-full text-white font-headline font-bold rounded-[8px] shadow-xl hover:opacity-90 active:scale-[0.98] transition-all duration-300 uppercase tracking-widest text-sm flex items-center justify-center py-4" style="background: linear-gradient(90deg, #006c4a 0%, #1db983 100%);" onclick="closeForgotPasswordModal()">
+                    ENTENDIDO
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let mode = "login";
+
+        window.onload = function() {
+            switchTab("login");
+        };
+
+        function showForgotPasswordModal() {
+            const modal = document.getElementById('forgotPasswordModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.style.display = 'flex';
+            }
+        }
+
+        function closeForgotPasswordModal() {
+            const modal = document.getElementById('forgotPasswordModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.style.display = 'none';
+            }
+        }
+
+        function togglePasswordVisibility() {
+            const passInput = document.getElementById('passInput');
+            const toggleIcon = document.getElementById('togglePassword');
+            
+            if (passInput.type === 'password') {
+                passInput.type = 'text';
+                toggleIcon.innerHTML = '<use href="#icon-visibility_off"></use>';
+            } else {
+                passInput.type = 'password';
+                toggleIcon.innerHTML = '<use href="#icon-visibility"></use>';
+            }
+        }
+
+        function toggleConfirmPasswordVisibility() {
+            const confirmInput = document.getElementById('confirmPassword');
+            const toggleIcon = document.getElementById('toggleConfirmPassword');
+            
+            if (confirmInput.type === 'password') {
+                confirmInput.type = 'text';
+                toggleIcon.innerHTML = '<use href="#icon-visibility_off"></use>';
+            } else {
+                confirmInput.type = 'password';
+                toggleIcon.innerHTML = '<use href="#icon-check_circle"></use>';
+            }
+        }
+
+        function switchTab(m) {
+            if (m) {
+                mode = m;
+            } else {
+                mode = mode === "login" ? "register" : "login";
+            }
+
+            const forgotBtn = document.getElementById("forgotPassword");
+            const confirmGroup = document.getElementById("confirmPasswordGroup");
+
+            if (mode === "login") {
+                document.getElementById("pageTitle").innerText = "Iniciar Sesión";
+                document.getElementById("pageSubtitle").innerText = "Acceda a su cuenta para continuar su estudio.";
+                document.getElementById("submitBtnText").innerText = "Ingresar al Sistema";
+                document.getElementById("footerQuestion").innerText = "¿Es nuevo en la plataforma?";
+                document.getElementById("toggleLinkText").innerText = "Crear una cuenta";
+                if (confirmGroup) confirmGroup.style.display = "none";
+                if (forgotBtn) forgotBtn.style.display = "inline";
+            } else {
+                document.getElementById("pageTitle").innerText = "Crear Cuenta";
+                document.getElementById("pageSubtitle").innerText = "Únase a la plataforma para gestionar su registro.";
+                document.getElementById("submitBtnText").innerText = "Crear mi Cuenta";
+                document.getElementById("footerQuestion").innerText = "¿Ya tiene una cuenta?";
+                document.getElementById("toggleLinkText").innerText = "Iniciar sesión";
+                if (confirmGroup) confirmGroup.style.display = "block";
+                if (forgotBtn) forgotBtn.style.display = "none";
+            }
+
+            document.getElementById("msg").innerText = ""; 
+        }
+
+        function procesar() {
+    const u = document.getElementById("userInput").value;
+    const p = document.getElementById("passInput").value;
+
+    if (!u || !p) {
+        document.getElementById("msg").innerText = "Por favor, completa todos los campos";
+        document.getElementById("msg").className = "text-center text-sm font-bold text-error mt-4";
+        return;
+    }
+
+    const fn = mode === "register" ? "registrarUsuario" : "iniciarSesion";
+
+    // BLOQUEAR el botón igual que "Enviar datos al servidor"
+    const btn = document.getElementById("submitBtn");
+    const btnTexto = document.getElementById("submitBtnText");
+    btn.disabled = true;
+    btn.style.opacity = "0.6";
+    btn.style.cursor = "not-allowed";
+    btn.style.transform = "scale(1)";
+    btnTexto.innerText = mode === "register" ? "Creando cuenta..." : "Verificando credenciales...";
+
+    document.getElementById("msg").innerText = "";
+    document.getElementById("msg").className = "text-center text-sm font-bold text-on-surface-variant mt-4";
+
+    google.script.run
+        .withSuccessHandler((res) => {
+            // DESBLOQUEAR siempre al terminar (éxito o error de validación)
+            btn.disabled = false;
+            btn.style.opacity = "1";
+            btn.style.cursor = "pointer";
+            btnTexto.innerText = mode === "register" ? "Crear mi Cuenta" : "Ingresar al Sistema";
+
+            if (res === "OK") {
+                sessionStorage.setItem("activeUser", u);
+                // Al abrir la nueva página, el botón ya está libre (no importa)
+                google.script.run
+                    .withSuccessHandler((html) => {
+                        document.open();
+                        document.write(html);
+                        document.close();
+                    })
+                    .cargarPaginaFormulario();
+            } else if (res === "EXISTE") {
+                document.getElementById("msg").innerText = "⚠️ El usuario ya existe. Por favor, inicie sesión o elija otro nombre.";
+                document.getElementById("msg").className = "text-center text-sm font-bold text-error mt-4";
+            } else if (res === "PASS_ERROR") {
+                document.getElementById("msg").innerText = "❌ Contraseña incorrecta";
+                document.getElementById("msg").className = "text-center text-sm font-bold text-error mt-4";
+            } else if (res === "NO_EXISTE") {
+                document.getElementById("msg").innerText = "❌ El usuario no está registrado";
+                document.getElementById("msg").className = "text-center text-sm font-bold text-error mt-4";
+            } else {
+                document.getElementById("msg").innerText = "Error en la operación";
+                document.getElementById("msg").className = "text-center text-sm font-bold text-error mt-4";
+            }
+        })
+        .withFailureHandler((err) => {
+            // DESBLOQUEAR también si hay un error del servidor
+            btn.disabled = false;
+            btn.style.opacity = "1";
+            btn.style.cursor = "pointer";
+            btnTexto.innerText = mode === "register" ? "Crear mi Cuenta" : "Ingresar al Sistema";
+
+            document.getElementById("msg").innerText = "❌ Error de conexión con el servidor";
+            document.getElementById("msg").className = "text-center text-sm font-bold text-error mt-4";
+        })
+    [fn](u, p);
+}
+    </script>
+</body>
+</html>

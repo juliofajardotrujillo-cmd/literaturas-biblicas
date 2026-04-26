@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+    <base target="_top" />
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Registro de Distribución - Literaturas Bíblicas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-on-surface": "#eff1f2",
+                        "tertiary-fixed": "#d4e6e5",
+                        "secondary-fixed": "#c1e9f5",
+                        "on-secondary-fixed": "#001f26",
+                        "on-primary-container": "#00422c",
+                        "surface-variant": "#e1e3e4",
+                        "background": "#f8f9fa",
+                        "inverse-primary": "#53dea5",
+                        "outline": "#6c7a71",
+                        "surface-container": "#eceeef",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed-variant": "#3a4a49",
+                        "on-tertiary-fixed": "#0e1e1e",
+                        "secondary-fixed-dim": "#a5cdd8",
+                        "primary-fixed": "#72fbbf",
+                        "primary-fixed-dim": "#53dea5",
+                        "tertiary-container": "#95a6a5",
+                        "surface-dim": "#d8dadb",
+                        "outline-variant": "#bbcac0",
+                        "surface-tint": "#006c4a",
+                        "on-secondary-fixed-variant": "#254c55",
+                        "on-surface": "#191c1d",
+                        "inverse-surface": "#2e3132",
+                        "on-surface-variant": "#3d4a42",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-high": "#e6e8e9",
+                        "primary": "#006c4a",
+                        "on-secondary-container": "#446a74",
+                        "surface": "#f8f9fa",
+                        "primary-container": "#1db983",
+                        "on-background": "#191c1d",
+                        "on-primary": "#ffffff",
+                        "surface-container-low": "#f2f4f5",
+                        "on-tertiary-container": "#2c3c3c",
+                        "secondary": "#3e646e",
+                        "surface-container-lowest": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#516161",
+                        "on-primary-fixed-variant": "#005237",
+                        "surface-container-highest": "#e1e3e4",
+                        "surface-bright": "#f8f9fa",
+                        "secondary-container": "#c1e9f5",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#b8cac9",
+                        "on-primary-fixed": "#002114",
+                        "on-secondary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "2xl": "1rem",
+                        "3xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "label": ["Inter", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .icon {
+            display: inline-block;
+            width: 1em;
+            height: 1em;
+            fill: currentColor;
+            vertical-align: -0.125em;
+            flex-shrink: 0;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .glass-modal {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+        
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus, 
+        input:-webkit-autofill:active {
+            -webkit-box-shadow: 0 0 0 30px #ffffff inset !important;
+            -webkit-text-fill-color: #191c1d !important;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+
+        /* Identico al Login: 8px radius, sin border azul */
+        .input-elevated {
+            background: #ffffff;
+            border: none !important;
+            border-radius: 12px !important;
+            box-shadow: 0 4px 8px -2px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+        .input-elevated:focus {
+            background: #ffffff;
+            box-shadow: 0 12px 16px -4px rgba(0, 0, 0, 0.15), 0 4px 8px -2px rgba(0, 0, 0, 0.1);
+            outline: none;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(0, 108, 74, 0.1);
+            border-radius: 12px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 108, 74, 0.2);
+        }
+        body {
+            background-color: #f8f9fa;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes zoomIn {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .animate-in {
+            animation: fadeIn 0.3s ease-out, zoomIn 0.3s ease-out;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="font-body text-on-surface selection:bg-primary-container selection:text-on-primary-container min-h-screen relative">
+
+    <svg style="display: none;" xmlns="http://www.w3.org/2000/svg">
+        <symbol id="icon-person" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></symbol>
+        <symbol id="icon-help_outline" viewBox="0 0 24 24"><path d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4 0 2.5 3 2.75 3 5h2c0-3.25-3-3-3-5 0-.55.45-1 1-1s1 .45 1 1h2c0-1.66-1.34-3-3-3z"/></symbol>
+        <symbol id="icon-logout" viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></symbol>
+        <symbol id="icon-assignment_ind" viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2c0-1.66 3.33-2.5 5-2.5s5 .84 5 2.5v2zM12 11c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/></symbol>
+        <symbol id="icon-auto_stories" viewBox="0 0 24 24"><path d="M19 1l-5 5v11l5-4.5V1zM1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5V6c-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6zm22 13.5V6c-1.45-1.1-3.55-1.5-5.5-1.5-1.95 0-4.05.4-5.5 1.5v15.5c1.45-1.1 3.55-1.5 5.5-1.5 1.45 0 3.4.45 4.75 1.1.1.05.15.05.25.05.25 0 .5-.25.5-.5z"/></symbol>
+        <symbol id="icon-format_size" viewBox="0 0 24 24"><path d="M9 4v3h5v12h3V7h5V4H9zm-6 8h3v7h3v-7h3V9H3v3z"/></symbol>
+        <symbol id="icon-text_fields" viewBox="0 0 24 24"><path d="M2.5 4v3h5v12h3V7h5V4h-13zm19 5h-9v3h3v7h3v-7h3V9z"/></symbol>
+        <symbol id="icon-auto_awesome" viewBox="0 0 24 24"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/></symbol>
+        <symbol id="icon-menu_book" viewBox="0 0 24 24"><path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1zM3 18.5V8c1.46-.35 3.14-.5 4.5-.5 1.36 0 3.04.15 4.5.5v10.5c-1.46-.35-3.14-.5-4.5-.5-1.36 0-3.04.15-4.5.5zm16 0c-1.46-.35-3.14-.5-4.5-.5-1.36 0-3.04.15-4.5.5V8c1.46-.35 3.14-.5 4.5-.5 1.36 0 3.04.15 4.5.5v10.5z"/></symbol>
+        <symbol id="icon-check_circle" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></symbol>
+        <symbol id="icon-send" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></symbol>
+        <symbol id="icon-info" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></symbol>
+        <symbol id="icon-error" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></symbol>
+        <symbol id="icon-chevron_right" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></symbol>
+        <symbol id="icon-call" viewBox="0 0 24 24"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56-.35-.12-.74-.03-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/></symbol>
+        <symbol id="icon-church" viewBox="0 0 24 24"><path d="M18 12.22V9l-5-2.5V5h2V3h-2V1h-2v2H9v2h2v1.5L6 9v3.22L2 14v8h8v-3c0-1.1.9-2 2-2s2 .9 2 2v3h8v-8l-4-1.78zM20 20h-4v-3c0-2.21-1.79-4-4-4s-4 1.79-4 4v3H4v-5l3-1.33V10.5l5-2.5 5 2.5v1.17l3 1.33v5z"/></symbol>
+        <symbol id="icon-account_balance" viewBox="0 0 24 24"><path d="M4 10v7h3v-7H4zm6 0v7h3v-7h-3zM2 22h19v-3H2v3zm14-12v7h3v-7h-3zm-4.5-9L2 6v2h19V6l-9.5-5z"/></symbol>
+        <symbol id="icon-location_on" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></symbol>
+        <symbol id="icon-format_list_numbered" viewBox="0 0 24 24"><path d="M2 17h2v.5H3v1h1v.5H2v1h3v-4H2v1zm1-9h1V4H2v1h1v3zm-1 3h1.8L2 13.1v.9h3v-1H3.2L5 10.9V10H2v1zm5-6v2h14V5H7zm0 14h14v-2H7v2zm0-6h14v-2H7v2z"/></symbol>
+        <symbol id="icon-close" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></symbol>
+    </svg>
+
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="absolute top-[-5%] left-[-10%] w-[50%] h-[50%] bg-emerald-300/30 blur-[100px] rounded-full"></div>
+        <div class="absolute top-[15%] right-[-15%] w-[60%] h-[60%] bg-primary/20 blur-[120px] rounded-full"></div>
+        <div class="absolute bottom-[-15%] left-[10%] w-[45%] h-[45%] bg-emerald-200/40 blur-[90px] rounded-full"></div>
+    </div>
+
+    <!-- TopAppBar -->
+    <header class="fixed top-0 w-full z-50 bg-white/70 backdrop-blur-xl border-b border-white/40">
+        <div class="flex justify-between items-center px-6 py-4 w-full max-w-7xl mx-auto">
+            <div class="flex items-center gap-2">
+                <span class="text-xl font-bold tracking-tighter text-emerald-900 font-headline">Literaturas Bíblicas</span>
+            </div>
+            <div class="flex items-center gap-2 sm:gap-4">
+                
+                <div class="relative">
+                    <button class="flex items-center gap-2 p-2 sm:px-4 sm:py-2 rounded-full hover:bg-emerald-50/80 transition-all font-medium text-emerald-800" id="userBtn" onclick="toggleUserPopover()">
+                        <svg class="icon !text-2xl"><use href="#icon-person"></use></svg>
+                        <span class="hidden sm:inline text-sm font-semibold tracking-tight" id="userName">Usuario</span>
+                    </button>
+                    <div id="userPopover" class="absolute top-full right-0 mt-2 bg-white/95 backdrop-blur-xl border border-surface-variant/50 shadow-[0_8px_24px_rgba(0,0,0,0.1)] rounded-2xl px-4 py-3 hidden z-50 animate-in" style="transform-origin: top right;">
+                        <span class="text-sm font-extrabold text-emerald-950 whitespace-nowrap" id="popoverUserName">Usuario</span>
+                    </div>
+                </div>
+
+                <button class="flex items-center gap-2 p-2 sm:px-4 sm:py-2 border border-primary/20 rounded-full text-primary font-bold text-[10px] tracking-widest hover:bg-primary/5 transition-all uppercase group" style="padding: 6px;" onclick="toggleModal(true)">
+                    <svg class="icon !text-2xl sm:!text-lg group-hover:rotate-12 transition-transform"><use href="#icon-help_outline"></use></svg>
+                    <span class="hidden sm:inline">EXPLICACIÓN</span>
+                </button>
+
+                <button class="flex items-center gap-2 p-2 sm:px-4 sm:py-2 bg-error/5 text-error rounded-full text-[10px] font-bold tracking-widest uppercase hover:bg-error/10 transition-all group" onclick="confirmLogout()">
+                    <svg class="icon !text-2xl sm:!text-lg group-hover:rotate-12 transition-transform"><use href="#icon-logout"></use></svg>
+                    <span class="hidden sm:inline">CERRAR SESIÓN</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="relative z-10 pt-24 pb-16 px-6">
+        <section class="max-w-6xl mx-auto">
+            <div class="mb-12">
+                <div class="relative z-10 max-w-2xl">
+                    <h1 class="text-4xl md:text-5xl font-headline font-extrabold tracking-tight text-emerald-950 mb-6">Registro de Distribución</h1>
+                    <p class="text-lg text-on-surface-variant/80 font-normal leading-relaxed max-w-xl">Para garantizar una distribución responsable y precisa, complete cada campo con información completa y correctamente escrita de todos sus datos.</p>
+                </div>
+            </div>
+
+            <form class="space-y-8" id="formDatos" onsubmit="return false;">
+                
+                <div class="glass-panel rounded-3xl p-6 md:p-8 space-y-8 shadow-[0_8px_24px_rgba(0,0,0,0.04)] relative z-50">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-100/50 flex items-center justify-center text-primary shadow-sm">
+                            <svg class="icon !text-2xl"><use href="#icon-assignment_ind"></use></svg>
+                        </div>
+                        <h3 class="font-headline text-lg font-extrabold tracking-wide text-emerald-900 uppercase">DATOS DEL PASTOR</h3>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="md:col-span-2">
+                            <label class="block text-[11px] font-extrabold text-emerald-900/60 uppercase tracking-[0.15em] mb-3 ml-1">Nombre completo del Pastor</label>
+                            <div class="relative transition-transform duration-300 focus-within:-translate-y-1">
+                                <input class="w-full p-4 text-on-surface placeholder:text-slate-400/60 focus:ring-2 focus:ring-primary/10 outline-none input-elevated" placeholder="Nombre y 2 Apellidos del Pastor" type="text" id="nombrePastor"/>
+                                <p class="text-error text-[10px] font-bold mt-1 ml-1 hidden" id="err-nombrePastor"></p>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-extrabold text-emerald-900/60 uppercase tracking-[0.15em] mb-3 ml-1">Número de Teléfono</label>
+                            <div class="relative transition-transform duration-300 focus-within:-translate-y-1">
+                                <input class="w-full p-4 text-on-surface placeholder:text-slate-400/60 focus:ring-2 focus:ring-primary/10 outline-none input-elevated" placeholder="+53 00000000" type="tel" id="telefono"/>
+                                <p class="text-error text-[10px] font-bold mt-1 ml-1 hidden" id="err-telefono"></p>
+                            </div>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-[11px] font-extrabold text-emerald-900/60 uppercase tracking-[0.15em] mb-3 ml-1">Nombre de la Iglesia</label>
+                            <div class="relative transition-transform duration-300 focus-within:-translate-y-1">
+                                <input class="w-full p-4 text-on-surface placeholder:text-slate-400/60 focus:ring-2 focus:ring-primary/10 outline-none input-elevated" placeholder="Primera Iglesia Bautista" type="text" id="nombreIglesia"/>
+                                <p class="text-error text-[10px] font-bold mt-1 ml-1 hidden" id="err-nombreIglesia"></p>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-extrabold text-emerald-900/60 uppercase tracking-[0.15em] mb-3 ml-1">Denominación</label>
+                            <div class="relative transition-transform duration-300 focus-within:-translate-y-1">
+                                <input class="w-full p-4 text-on-surface placeholder:text-slate-400/60 focus:ring-2 focus:ring-primary/10 outline-none input-elevated" placeholder="Bautista" type="text" id="denominacion"/>
+                                <p class="text-error text-[10px] font-bold mt-1 ml-1 hidden" id="err-denominacion"></p>
+                            </div>
+                        </div>
+
+                        <div class="relative z-20">
+                            <label class="block text-[11px] font-extrabold text-emerald-900/60 uppercase tracking-[0.15em] mb-3 ml-1">Provincia</label>
+                            <div class="relative transition-transform duration-300 focus-within:-translate-y-1">
+                                <input autocomplete="off" class="w-full p-4 text-on-surface placeholder:text-slate-400/60 focus:ring-2 focus:ring-primary/10 outline-none input-elevated" placeholder="Seleccione provincia" type="text" id="provincia"/>
+                                <ul id="dropdownProvincia" class="absolute z-50 w-full mt-2 bg-white/95 backdrop-blur-xl border border-white/50 rounded-2xl shadow-[0_8px_24px_rgba(0,0,0,0.1)] max-h-60 overflow-y-auto hidden custom-scrollbar"></ul>
+                                <p class="text-error text-[10px] font-bold mt-1 ml-1 hidden" id="err-provincia"></p>
+                            </div>
+                        </div>
+
+                        <div class="relative z-10">
+                            <label class="block text-[11px] font-extrabold text-emerald-900/60 uppercase tracking-[0.15em] mb-3 ml-1">Municipio</label>
+                            <div class="relative transition-transform duration-300 focus-within:-translate-y-1">
+                                <input autocomplete="off" class="w-full p-4 text-on-surface placeholder:text-slate-400/60 focus:ring-2 focus:ring-primary/10 outline-none input-elevated" placeholder="Seleccione municipio" type="text" id="municipio"/>
+                                <ul id="dropdownMunicipio" class="absolute z-50 w-full mt-2 bg-white/95 backdrop-blur-xl border border-white/50 rounded-2xl shadow-[0_8px_24px_rgba(0,0,0,0.1)] max-h-60 overflow-y-auto hidden custom-scrollbar"></ul>
+                                <p class="text-error text-[10px] font-bold mt-1 ml-1 hidden" id="err-municipio"></p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-[11px] font-extrabold text-emerald-900/60 uppercase tracking-[0.15em] mb-3 ml-1">Lugar</label>
+                            <div class="relative transition-transform duration-300 focus-within:-translate-y-1">
+                                <input class="w-full p-4 text-on-surface placeholder:text-slate-400/60 focus:ring-2 focus:ring-primary/10 outline-none input-elevated" placeholder=" Barrio o Comunidad" type="text" id="lugar"/>
+                                <p class="text-error text-[10px] font-bold mt-1 ml-1 hidden" id="err-lugar"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-8 relative z-10">
+                    <div class="mb-6 px-4">
+                        <div class="flex items-center gap-4 mb-2">
+                            <div class="w-12 h-12 rounded-2xl bg-emerald-100/50 flex items-center justify-center text-primary shadow-sm">
+                                <svg class="icon !text-2xl"><use href="#icon-auto_stories"></use></svg>
+                            </div>
+                            <h3 class="font-headline text-lg font-extrabold tracking-wide text-emerald-900 uppercase">BIBLIAS</h3>
+                        </div>
+                        <p class="text-lg text-on-surface-variant/80 font-normal leading-relaxed max-w-xl">Especifique el número de ejemplares requeridos para cada categoría según la necesidad real de su iglesia.</p>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="glass-panel p-6 rounded-3xl shadow-[0_4px_16px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)] transition-all group border-white/60">
+                            <div class="flex items-center gap-4 mb-6">
+                                <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0 group-hover:bg-primary transition-colors">
+                                    <svg class="icon !text-2xl text-primary group-hover:text-white"><use href="#icon-format_size"></use></svg>
+                                </div>
+                                <div>
+                                    <label class="block text-base font-extrabold text-emerald-950 mb-0.5 leading-tight">Letra Grande</label>
+                                    <p class="text-[11px] text-tertiary/80 font-bold uppercase tracking-wider">Adultos</p>
+                                </div>
+                            </div>
+                            <div class="relative transition-transform duration-300 focus-within:-translate-y-1">
+                                <input class="w-full p-4 text-center font-bold text-emerald-900 focus:ring-2 focus:ring-primary/10 outline-none input-elevated" min="0" type="number" value="0" id="letraGrande"/>
+                                <p class="text-error text-[10px] font-bold mt-2 text-center hidden" id="err-letraGrande"></p>
+                            </div>
+                        </div>
+                        <div class="glass-panel p-6 rounded-3xl shadow-[0_4px_16px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)] transition-all group border-white/60">
+                            <div class="flex items-center gap-4 mb-6">
+                                <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0 group-hover:bg-primary transition-colors">
+                                    <svg class="icon !text-2xl text-primary group-hover:text-white"><use href="#icon-text_fields"></use></svg>
+                                </div>
+                                <div>
+                                    <label class="block text-base font-extrabold text-emerald-950 mb-0.5 leading-tight">Letra Pequeña</label>
+                                    <p class="text-[11px] text-tertiary/80 font-bold uppercase tracking-wider">Jóvenes</p>
+                                </div>
+                            </div>
+                            <div class="relative transition-transform duration-300 focus-within:-translate-y-1">
+                                <input class="w-full p-4 text-center font-bold text-emerald-900 focus:ring-2 focus:ring-primary/10 outline-none input-elevated" min="0" type="number" value="0" id="letraPequena"/>
+                                <p class="text-error text-[10px] font-bold mt-2 text-center hidden" id="err-letraPequena"></p>
+                            </div>
+                        </div>
+                        <div class="glass-panel p-6 rounded-3xl shadow-[0_4px_16px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)] transition-all group border-white/60">
+                            <div class="flex items-center gap-4 mb-6">
+                                <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0 group-hover:bg-primary transition-colors">
+                                    <svg class="icon !text-2xl text-primary group-hover:text-white"><use href="#icon-auto_awesome"></use></svg>
+                                </div>
+                                <div>
+                                    <label class="block text-base font-extrabold text-emerald-950 mb-0.5 leading-tight">Ilustradas</label>
+                                    <p class="text-[11px] text-tertiary/80 font-bold uppercase tracking-wider">Niños</p>
+                                </div>
+                            </div>
+                            <div class="relative transition-transform duration-300 focus-within:-translate-y-1">
+                                <input class="w-full p-4 text-center font-bold text-emerald-900 focus:ring-2 focus:ring-primary/10 outline-none input-elevated" min="0" type="number" value="0" id="ilustradas"/>
+                                <p class="text-error text-[10px] font-bold mt-2 text-center hidden" id="err-ilustradas"></p>
+                            </div>
+                        </div>
+                        <div class="glass-panel p-6 rounded-3xl shadow-[0_4px_16px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)] transition-all group border-white/60">
+                            <div class="flex items-center gap-4 mb-6">
+                                <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0 group-hover:bg-primary transition-colors">
+                                    <svg class="icon !text-2xl text-primary group-hover:text-white"><use href="#icon-menu_book"></use></svg>
+                                </div>
+                                <div>
+                                    <label class="block text-base font-extrabold text-emerald-950 mb-0.5 leading-tight">Cayado Pastor</label>
+                                    <p class="text-[11px] text-tertiary/80 font-bold uppercase tracking-wider">Guía</p>
+                                </div>
+                            </div>
+                            <div class="relative transition-transform duration-300 focus-within:-translate-y-1">
+                                <input class="w-full p-4 text-center font-bold text-emerald-900 focus:ring-2 focus:ring-primary/10 outline-none input-elevated" min="0" type="number" value="0" id="cayado"/>
+                                <p class="text-error text-[10px] font-bold mt-2 text-center hidden" id="err-cayado"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center py-8">
+                    <div class="rounded-3xl overflow-hidden aspect-[16/10] relative shadow-[0_16px_48px_rgba(0,108,74,0.15)] ring-1 ring-white/20">
+                        <img alt="Biblical literature" class="absolute inset-0 w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBiBr42XDWHe3kEH7BDhMcaNkERm16IYpBv0wO6BrTUywrbivzBQSg53KJ9p3MC46CEtmzrNEFCe96FGUKVu37HfLpZMg6g4qfgSbUYyX3dI3eET4BmD6RO3ePxVR4gpKhNpzwdZSX6Q2QBeH-QacEa4uFQl5gciXuXag7N1QAPWzhg--dZ-byHRH9wk7AvL40goA6eH1MuuQaMRZV2cwxJxi2k-bV1Io-J-L_-pPoqlTImQD9z_UeoD11VhmXKgNAXjsRtN8M1oS4O"/>
+                        <div class="absolute inset-0 bg-gradient-to-t from-emerald-950/80 via-emerald-950/20 to-transparent flex items-end p-8">
+                            <div class="flex flex-col">
+                                <p class="text-white font-headline font-light italic text-lg leading-relaxed">"Tu palabra es lámpara a mis pies y lumbrera a mi camino."</p>
+                                <p class="text-white font-headline font-light italic text-lg leading-relaxed">"Salmo 119:105"</p>  
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-6">
+                        <h4 class="font-headline text-3xl font-extrabold text-emerald-950 tracking-tight">Compromiso Editorial</h4>
+                        <p class="text-on-surface-variant/80 leading-loose text-base">Cada ejemplar entregado es una semilla para el crecimiento espiritual de la comunidad. Asegúrese de completar todos los campos obligatorios antes del envío para una mejor distribución.</p>
+                        <ul class="space-y-4">
+                            <li class="flex items-center gap-3 text-sm text-emerald-900 font-bold tracking-tight">
+                                <svg class="icon !text-emerald-600 !text-xl"><use href="#icon-check_circle"></use></svg>
+                                Verificación de inventario automática
+                            </li>
+                            <li class="flex items-center gap-3 text-sm text-emerald-900 font-bold tracking-tight">
+                                <svg class="icon !text-emerald-600 !text-xl"><use href="#icon-check_circle"></use></svg>
+                                Procesamiento seguro de solicitudes
+                            </li>
+                             <li class="flex items-center gap-3 text-sm text-emerald-900 font-bold tracking-tight">
+                                <svg class="icon !text-emerald-600 !text-xl"><use href="#icon-check_circle"></use></svg>
+                                Registro seguro en la base de datos
+                            </li>
+                             <li class="flex items-center gap-3 text-sm text-emerald-900 font-bold tracking-tight">
+                                <svg class="icon !text-emerald-600 !text-xl"><use href="#icon-check_circle"></use></svg>
+                                Datos verificados en tiempo real
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="pt-12 flex flex-col items-center" style="padding: 0">
+                    <button 
+                        id="btnEnviar"
+                        class="group relative max-w-2xl rounded-2xl text-white font-headline font-bold text-lg tracking-wide shadow-lg shadow-emerald-900/10 hover:shadow-emerald-900/30 hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-4 overflow-hidden py-5 px-16" 
+                        style="background: linear-gradient(90deg, #006c4a 0%, #1db983 100%);" 
+                        type="button"
+                        onclick="enviar()"
+                    >
+                        <span id="btnTexto" class="relative z-10 uppercase">ENVIAR DATOS AL SERVIDOR</span>
+                        <svg class="icon relative z-10 !text-xl transition-transform group-hover:translate-x-1"><use href="#icon-send"></use></svg>
+                        <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    </button>
+                    <div id="status" class="mt-6 text-sm font-bold text-primary"></div>
+                    <p class="mt-8 text-[10px] text-emerald-900/40 font-bold tracking-[0.2em] uppercase" style="text-align:center">• Plataforma Oficial de Distribución Ministerial </p>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <div class="fixed inset-0 z-[110] flex items-center justify-center p-4 sm:p-6 lg:p-8 hidden" id="customAlertModal">
+        <div class="absolute inset-0 bg-on-surface/20 backdrop-blur-sm" onclick="closeCustomAlert()"></div>
+        <div class="glass-modal relative w-full max-w-sm overflow-hidden rounded-3xl shadow-[0_32px_64px_-12px_rgba(0,0,0,0.15)] flex flex-col border border-white/40 animate-in">
+            <div class="p-8 flex flex-col items-center text-center space-y-4">
+                <div id="alertIconContainer" class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mb-2">
+                    <svg class="icon text-4xl" id="alertIcon"><use href="#icon-info"></use></svg>
+                </div>
+                <h2 class="text-2xl font-extrabold text-on-surface tracking-tight leading-tight font-headline" id="alertTitle">Aviso</h2>
+                <p class="text-sm font-medium text-on-surface-variant leading-relaxed" id="alertMessage"></p>
+            </div>
+            <div class="px-8 py-6 border-t border-white/20 shrink-0 flex justify-center">
+                <button class="w-full text-white font-headline font-bold rounded-2xl shadow-xl hover:opacity-90 active:scale-[0.98] transition-all duration-300 uppercase tracking-widest text-sm flex items-center justify-center py-4" style="background: linear-gradient(90deg, #006c4a 0%, #1db983 100%);" onclick="closeCustomAlert()">
+                    ACEPTAR
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed inset-0 z-[110] flex items-center justify-center p-4 sm:p-6 lg:p-8 hidden" id="customConfirmModal">
+        <div class="absolute inset-0 bg-on-surface/20 backdrop-blur-sm" onclick="closeCustomConfirm()"></div>
+        <div class="glass-modal relative w-full max-w-sm overflow-hidden rounded-3xl shadow-[0_32px_64px_-12px_rgba(0,0,0,0.15)] flex flex-col border border-white/40 animate-in">
+            <div class="p-8 flex flex-col items-center text-center space-y-4">
+                <div class="w-16 h-16 bg-error/10 rounded-2xl flex items-center justify-center text-error mb-2">
+                    <svg class="icon text-4xl" id="confirmIcon"><use href="#icon-logout"></use></svg>
+                </div>
+                <h2 class="text-2xl font-extrabold text-on-surface tracking-tight leading-tight font-headline" id="confirmTitle">Confirmación</h2>
+                <p class="text-sm font-medium text-on-surface-variant leading-relaxed" id="confirmMessage"></p>
+            </div>
+            <div class="px-8 py-6 border-t border-white/20 shrink-0 flex gap-4 justify-center">
+                <button class="flex-1 text-on-surface-variant font-headline font-bold rounded-2xl bg-surface-variant/50 hover:bg-surface-variant transition-all duration-300 uppercase tracking-widest text-sm py-4" onclick="closeCustomConfirm()">
+                    Cancelar
+                </button>
+                <button class="flex-1 text-white font-headline font-bold rounded-2xl shadow-xl hover:opacity-90 active:scale-[0.98] transition-all duration-300 uppercase tracking-widest text-sm py-4" style="background: linear-gradient(90deg, #ba1a1a 0%, #ff5449 100%);" id="btnConfirmAction">
+                    Aceptar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 lg:p-8 hidden" id="modalExplicacion">
+        <div class="absolute inset-0 bg-on-surface/20 backdrop-blur-sm" onclick="toggleModal(false)"></div>
+        <div class="glass-modal relative w-full max-w-4xl max-h-[85vh] lg:max-h-[90vh] overflow-hidden rounded-3xl shadow-[0_32px_64px_-12px_rgba(0,0,0,0.15)] flex flex-col border border-white/40 animate-in">
+            <div class="flex items-center justify-between px-8 py-6 border-b border-white/20 shrink-0">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary">
+                        <svg class="icon !text-4xl"><use href="#icon-menu_book"></use></svg>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-extrabold text-on-surface tracking-tight leading-tight font-headline">Guía de Registro</h2>
+                        <p class="text-sm font-medium text-tertiary">Plataforma Oficial de Distribución Ministerial</p>
+                    </div>
+                </div>
+                <button class="w-10 h-10 rounded-full hover:bg-black/5 flex items-center justify-center transition-colors group" onclick="toggleModal(false)">
+                    <svg class="icon text-on-surface-variant group-hover:text-error transition-colors !text-2xl"><use href="#icon-close"></use></svg>
+                </button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+                <div class="space-y-8">
+                    <p class="text-on-surface-variant text-base leading-relaxed italic border-l-4 border-primary/30 pl-4">
+                       Para garantizar una distribución adecuada de la literatura bíblica, le pedimos completar su solicitud siguiendo cuidadosamente las instrucciones establecidas a continuación.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-white/40 p-6 rounded-3xl border border-white/50 space-y-3 shadow-xl shadow-black/5">
+                            <div class="flex items-center gap-3">
+                                <svg class="icon text-primary !text-3xl"><use href="#icon-person"></use></svg>
+                                <h4 class="font-bold text-on-surface">Nombre del Pastor</h4>
+                            </div>
+                            <p class="text-sm text-on-surface-variant leading-relaxed">Ingrese su nombre y sus dos apellidos correctamente.</p>
+                        </div>
+                        <div class="bg-white/40 p-6 rounded-3xl border border-white/50 space-y-3 shadow-xl shadow-black/5">
+                            <div class="flex items-center gap-3">
+                                <svg class="icon text-primary !text-3xl"><use href="#icon-call"></use></svg>
+                                <h4 class="font-bold text-on-surface">Número de Teléfono</h4>
+                            </div>
+                            <p class="text-sm text-on-surface-variant leading-relaxed">Teléfono en el cual poder localizarlo para cualquier duda.</p>
+                        </div>
+                        <div class="bg-white/40 p-6 rounded-3xl border border-white/50 space-y-3 shadow-xl shadow-black/5">
+                            <div class="flex items-center gap-3">
+                                <svg class="icon text-primary !text-3xl"><use href="#icon-church"></use></svg>
+                                <h4 class="font-bold text-on-surface">Nombre de la Iglesia</h4>
+                            </div>
+                            <p class="text-sm text-on-surface-variant leading-relaxed">Nombre oficial de la congregación.</p>
+                        </div>
+                        <div class="bg-white/40 p-6 rounded-3xl border border-white/50 space-y-3 shadow-xl shadow-black/5">
+                            <div class="flex items-center gap-3">
+                                <svg class="icon text-primary !text-3xl"><use href="#icon-account_balance"></use></svg>
+                                <h4 class="font-bold text-on-surface">Denominación</h4>
+                            </div>
+                            <p class="text-sm text-on-surface-variant leading-relaxed">Organización religiosa a la que pertenece.</p>
+                        </div>
+                        <div class="md:col-span-2 bg-gradient-to-br from-primary/5 to-transparent p-6 rounded-3xl border border-primary/10 space-y-3 shadow-xl shadow-black/5">
+                            <div class="flex items-center gap-3">
+                                <svg class="icon text-primary !text-3xl"><use href="#icon-location_on"></use></svg>
+                                <h4 class="font-bold text-on-surface">Ubicación (Provincia, Municipio, Lugar)</h4>
+                            </div>
+                            <p class="text-sm text-on-surface-variant leading-relaxed">Debe seleccionar obligatoriamente una Provincia y luego su respectivo Municipio en las listas desplegables para garantizar la validez territorial de su solicitud y a continuacion el barrio, comunidad o reparto donde se encuentra la iglesia.</p>
+                        </div>
+                        <div class="md:col-span-2 bg-white/60 p-6 rounded-3xl border border-white/50 space-y-3 shadow-xl shadow-black/5">
+                            <div class="flex items-center gap-3">
+                                <svg class="icon text-primary !text-3xl"><use href="#icon-format_list_numbered"></use></svg>
+                                <h4 class="font-bold text-on-surface">Cantidades de Biblias</h4>
+                            </div>
+                            <p class="text-sm text-on-surface-variant leading-relaxed">Especifique el número de ejemplares requeridos para cada categoría según la necesidad real de su iglesia.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="px-8 py-6 border-t border-white/20 shrink-0 flex justify-center">
+                <button class="text-white font-headline font-bold rounded-2xl shadow-xl hover:opacity-90 active:scale-[0.98] transition-all duration-300 uppercase tracking-widest text-base flex items-center justify-center gap-4 py-5 px-12" style="background: linear-gradient(90deg, #006c4a 0%, #1db983 100%);" onclick="toggleModal(false)">
+                    ENTENDIDO, CONTINUAR
+                    <svg class="icon !text-2xl"><use href="#icon-chevron_right"></use></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var user = sessionStorage.getItem('activeUser');
+        let confirmActionCallback = null;
+        let dictUbicaciones = {}; 
+
+        window.onload = function() {
+            if (!user) {
+                google.script.run.withSuccessHandler(function(html) { 
+                    document.open(); 
+                    document.write(html); 
+                    document.close(); 
+                }).cargarPaginaLogin();
+                return;
+            }
+
+            document.getElementById('userName').innerText = user;
+            document.getElementById('popoverUserName').innerText = user;
+            
+            google.script.run
+                .withSuccessHandler(function(data) {
+                    dictUbicaciones = data;
+                    
+                    setupAutocomplete('provincia', 'dropdownProvincia', 
+                        function() { return Object.keys(dictUbicaciones); },
+                        function(selected) {
+                            const munInput = document.getElementById('municipio');
+                            munInput.value = ''; 
+                            validarCampo('provincia', 'provincia', 'Debe seleccionar una Provincia.');
+                        }
+                    );
+
+                    setupAutocomplete('municipio', 'dropdownMunicipio',
+                        function() {
+                            const prov = document.getElementById('provincia').value;
+                            return dictUbicaciones[prov] || [];
+                        },
+                        null
+                    );
+
+                    google.script.run
+                        .withSuccessHandler(function(datos) {
+                            if (datos) {
+                                document.getElementById('nombrePastor').value = datos.pastor || '';
+                                document.getElementById('nombreIglesia').value = datos.iglesia || '';
+                                document.getElementById('denominacion').value = datos.denominacion || '';
+                                document.getElementById('provincia').value = datos.provincia || '';
+                                document.getElementById('municipio').value = datos.municipio || '';
+                                document.getElementById('lugar').value = datos.lugar || '';
+                                document.getElementById('telefono').value = datos.telefono || '';
+                                document.getElementById('letraGrande').value = (datos.letraGrande !== undefined && datos.letraGrande !== "") ? datos.letraGrande : '0';
+                                document.getElementById('letraPequena').value = (datos.letraPequena !== undefined && datos.letraPequena !== "") ? datos.letraPequena : '0';
+                                document.getElementById('ilustradas').value = (datos.ilustradas !== undefined && datos.ilustradas !== "") ? datos.ilustradas : '0';
+                                document.getElementById('cayado').value = (datos.cayado !== undefined && datos.cayado !== "") ? datos.cayado : '0';
+                            }
+                        })
+                        .withFailureHandler(function(e) {
+                            console.error("Error cargando base de datos: ", e);
+                        })
+                        .getDatosExistentes(user);
+                })
+                .getLocalidades();
+
+            configValidacion.forEach(conf => {
+                const el = document.getElementById(conf.id);
+                if(el) {
+                    el.addEventListener('blur', () => validarCampo(conf.id, conf.type, conf.msgEmpty));
+                    el.addEventListener('input', () => {
+                        el.classList.remove('text-error', 'ring-2', 'ring-error');
+                        document.getElementById('err-' + conf.id).classList.add('hidden');
+                    });
+                }
+            });
+        };
+
+        function toggleUserPopover() {
+            const popover = document.getElementById('userPopover');
+            if (popover) popover.classList.toggle('hidden');
+        }
+
+        document.addEventListener('click', function(event) {
+            const userBtn = document.getElementById('userBtn');
+            const popover = document.getElementById('userPopover');
+            if (userBtn && popover && !userBtn.contains(event.target) && !popover.contains(event.target)) {
+                popover.classList.add('hidden');
+            }
+        });
+
+        function showCustomAlert(title, message, icon = 'info', iconColorClass = 'text-primary', bgIconColorClass = 'bg-primary/10') {
+            document.getElementById('alertTitle').innerText = title;
+            document.getElementById('alertMessage').innerText = message;
+            
+            const iconEl = document.getElementById('alertIcon');
+            iconEl.innerHTML = '<use href="#icon-' + icon + '"></use>';
+            iconEl.className = `icon text-4xl ${iconColorClass}`;
+            
+            document.getElementById('alertIconContainer').className = `w-16 h-16 rounded-2xl flex items-center justify-center mb-2 ${bgIconColorClass}`;
+            document.getElementById('customAlertModal').classList.remove('hidden');
+        }
+
+        function closeCustomAlert() {
+            document.getElementById('customAlertModal').classList.add('hidden');
+        }
+
+        function showCustomConfirm(title, message, callback) {
+            document.getElementById('confirmTitle').innerText = title;
+            document.getElementById('confirmMessage').innerText = message;
+            confirmActionCallback = callback;
+            document.getElementById('customConfirmModal').classList.remove('hidden');
+        }
+
+        function closeCustomConfirm() {
+            document.getElementById('customConfirmModal').classList.add('hidden');
+            confirmActionCallback = null;
+        }
+
+        document.getElementById('btnConfirmAction').addEventListener('click', function() {
+            if (confirmActionCallback) confirmActionCallback();
+            closeCustomConfirm();
+        });
+
+        const configValidacion = [
+            { id: 'nombrePastor', type: 'text', msgEmpty: 'El nombre del Pastor es obligatorio.' },
+            { id: 'telefono', type: 'text', msgEmpty: 'El teléfono es obligatorio.' },
+            { id: 'nombreIglesia', type: 'text', msgEmpty: 'El nombre de la Iglesia es obligatorio.' },
+            { id: 'denominacion', type: 'text', msgEmpty: 'La denominación es obligatoria.' },
+            { id: 'provincia', type: 'provincia', msgEmpty: 'Debe seleccionar una Provincia.' },
+            { id: 'municipio', type: 'municipio', msgEmpty: 'Debe seleccionar un Municipio.' },
+            { id: 'lugar', type: 'text', msgEmpty: 'El lugar / sector es obligatorio.' },
+            { id: 'letraGrande', type: 'number', msgEmpty: 'Campo requerido.' },
+            { id: 'letraPequena', type: 'number', msgEmpty: 'Campo requerido.' },
+            { id: 'ilustradas', type: 'number', msgEmpty: 'Campo requerido.' },
+            { id: 'cayado', type: 'number', msgEmpty: 'Campo requerido.' }
+        ];
+
+        function validarCampo(id, type, msgEmpty) {
+            const input = document.getElementById(id);
+            const err = document.getElementById('err-' + id);
+            let val = input.value.trim();
+            let esValido = true;
+            let mensaje = "";
+
+            if (val === "") {
+                esValido = false;
+                mensaje = msgEmpty;
+            } else if (type === 'provincia') {
+                if (!dictUbicaciones || !dictUbicaciones[val]) {
+                    esValido = false;
+                    mensaje = "Por favor, seleccione una provincia de la lista desplegable.";
+                }
+            } else if (type === 'municipio') {
+                const provVal = document.getElementById('provincia').value.trim();
+                if (!dictUbicaciones || !dictUbicaciones[provVal] || !dictUbicaciones[provVal].includes(val)) {
+                    esValido = false;
+                    mensaje = "Por favor, seleccione un municipio válido perteneciente a la provincia.";
+                }
+            } else if (type === 'number') {
+                if (isNaN(val) || parseInt(val) < 0 || !Number.isInteger(Number(val))) {
+                    esValido = false;
+                    mensaje = "Debe escribir solo números enteros (0 o superior).";
+                }
+            }
+
+            if (!esValido) {
+                input.classList.add('text-error', 'ring-2', 'ring-error');
+                err.innerText = mensaje;
+                err.classList.remove('hidden');
+                return false;
+            } else {
+                input.classList.remove('text-error', 'ring-2', 'ring-error');
+                err.classList.add('hidden');
+                return true;
+            }
+        }
+
+        function validarFormularioCompleto() {
+            let esFormularioValido = true;
+            for (let i = 0; i < configValidacion.length; i++) {
+                const conf = configValidacion[i];
+                if (!validarCampo(conf.id, conf.type, conf.msgEmpty)) {
+                    esFormularioValido = false;
+                }
+            }
+            return esFormularioValido;
+        }
+
+        function setupAutocomplete(inputId, dropdownId, getOptionsCallback, onSelectCallback) {
+            const input = document.getElementById(inputId);
+            const dropdown = document.getElementById(dropdownId);
+
+            function renderOptions(filterText) {
+                const options = getOptionsCallback().sort((a, b) => a.localeCompare(b));
+                dropdown.innerHTML = '';
+                
+                if (options.length === 0) {
+                    dropdown.classList.add('hidden');
+                    return;
+                }
+
+                const filtered = options.filter(o => o.toLowerCase().includes(filterText.toLowerCase()));
+                
+                if (filtered.length === 0) {
+                    dropdown.classList.add('hidden');
+                    return;
+                }
+
+                filtered.forEach(opt => {
+                    const li = document.createElement('li');
+                    li.className = 'px-4 py-3 hover:bg-primary/10 cursor-pointer text-sm font-bold text-emerald-950 transition-colors border-b border-surface-variant/30 last:border-0';
+                    li.textContent = opt;
+                    li.onmousedown = function(e) {
+                        e.preventDefault(); 
+                        input.value = opt;
+                        input.classList.remove('text-error', 'ring-2', 'ring-error');
+                        document.getElementById('err-' + inputId).classList.add('hidden');
+                        dropdown.classList.add('hidden');
+                        if (onSelectCallback) onSelectCallback(opt);
+                    };
+                    dropdown.appendChild(li);
+                });
+                dropdown.classList.remove('hidden');
+            }
+
+            input.addEventListener('focus', function() {
+                renderOptions(input.value);
+            });
+
+            input.addEventListener('input', function() {
+                renderOptions(input.value);
+            });
+
+            input.addEventListener('blur', function() {
+                dropdown.classList.add('hidden');
+            });
+        }
+
+        function toggleModal(show) {
+            if (show) {
+                document.getElementById('modalExplicacion').classList.remove('hidden');
+            } else {
+                document.getElementById('modalExplicacion').classList.add('hidden');
+            }
+        }
+
+        function confirmLogout() {
+            showCustomConfirm('Cerrar Sesión', '¿Deseas cerrar sesión y salir del sistema?', function() {
+                sessionStorage.removeItem('activeUser');
+                google.script.run
+                    .withSuccessHandler(function(url) { 
+                        window.top.location.replace(url);
+                    })
+                    .getAppUrl();
+            });
+        }
+
+        function enviar() {
+            // EVITAR MÚLTIPLES ENVÍOS: Verificar si el botón ya está deshabilitado
+            const btnEnviar = document.getElementById('btnEnviar');
+            const btnTexto = document.getElementById('btnTexto');
+            
+            if (btnEnviar.disabled) {
+                // Si el botón ya está deshabilitado, no hacer nada
+                return;
+            }
+            
+            if (!validarFormularioCompleto()) {
+                 showCustomAlert('Error de Validación', 'Existen campos vacíos o con formatos incorrectos. Revise las alertas rojas en el formulario.', 'error', 'text-error', 'bg-error/10');
+                 return;
+            }
+
+            var prov = document.getElementById('provincia').value.trim();
+            var mun = document.getElementById('municipio').value.trim();
+
+            var datos = [
+                document.getElementById('nombrePastor').value.trim(),
+                document.getElementById('nombreIglesia').value.trim(),
+                document.getElementById('denominacion').value.trim(),
+                prov, 
+                mun,  
+                document.getElementById('lugar').value.trim(),
+                document.getElementById('telefono').value.trim(),
+                document.getElementById('letraGrande').value.trim(),
+                document.getElementById('letraPequena').value.trim(),
+                document.getElementById('ilustradas').value.trim(),
+                document.getElementById('cayado').value.trim()
+            ];
+
+            // BLOQUEAR EL BOTÓN mientras se envían los datos
+            btnEnviar.disabled = true;
+            btnEnviar.style.opacity = '0.6';
+            btnEnviar.style.cursor = 'not-allowed';
+            btnTexto.innerText = 'ENVIANDO DATOS AL SERVIDOR';
+            document.getElementById('status').innerText = 'Guardando datos...';
+
+            google.script.run
+                .withSuccessHandler(function(res) { 
+                    document.getElementById('status').innerText = '✅ Sincronizado correctamente'; 
+                    showCustomAlert('¡Proceso Exitoso!', res, 'check_circle', 'text-emerald-600', 'bg-emerald-100/50');
+                    
+                    // DESBLOQUEAR EL BOTÓN después de mostrar el mensaje de confirmación
+                    btnEnviar.disabled = false;
+                    btnEnviar.style.opacity = '1';
+                    btnEnviar.style.cursor = 'pointer';
+                    btnTexto.innerText = 'ENVIAR DATOS AL SERVIDOR';
+                })
+                .withFailureHandler(function(err) {
+                    document.getElementById('status').innerText = '❌ Error al guardar';
+                    showCustomAlert('Error del Servidor', 'Ocurrió un error al guardar los datos.', 'error', 'text-error', 'bg-error/10');
+                    
+                    // DESBLOQUEAR EL BOTÓN en caso de error
+                    btnEnviar.disabled = false;
+                    btnEnviar.style.opacity = '1';
+                    btnEnviar.style.cursor = 'pointer';
+                    btnTexto.innerText = 'ENVIAR DATOS AL SERVIDOR';
+                })
+                .guardarDatos(user, datos);
+        }
+    </script>
+</body>
+</html>
