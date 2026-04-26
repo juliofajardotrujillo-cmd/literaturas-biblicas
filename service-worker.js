@@ -41,8 +41,8 @@ const PRECACHE_URLS = [
   './app.js',
   './manifest.webmanifest',
   // Íconos — asegúrate de tener estos archivos reales en /icons/
-  './icons/icon-192.png',
-  './icons/icon-512.png',
+  './icons/book1.png',
+  './icons/book1.png',
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
