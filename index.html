@@ -29,6 +29,7 @@
             --surface: #f8f9fa;
             --on-surface: #191c1d;
             --on-surface-variant: #3d4a42;
+            --error: #ba1a1a;
             --tertiary: #516161;
         }
         body {
@@ -64,33 +65,86 @@
 
         .modal-body { padding: 2rem; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 1.25rem; }
 
-        .app-icon-preview { width: 56px; height: 56px; border-radius: 20px; background-color: #ffffff; box-shadow: 0 8px 16px -4px rgba(0,108,74,0.35); margin-bottom: 0.25rem; object-fit: cover; display: block; }
+        .app-icon-preview { 
+            width: 56px; 
+            height: 56px; 
+            border-radius: 20px; 
+            background-color: #ffffff; 
+            box-shadow: 0 8px 16px -4px rgba(0,108,74,0.35); 
+            margin-bottom: 0.25rem; 
+            object-fit: cover; 
+            display: block;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: high-quality;
+        }
 
         .modal-title { font-family: 'Manrope', sans-serif; font-size: 1.375rem; font-weight: 800; color: var(--on-surface); letter-spacing: -0.02em; line-height: 1.2; }
-        .modal-desc { font-size: 0.8125rem; font-weight: 500; color: var(--on-surface-variant); line-height: 1.65; max-width: 280px; }
+        .modal-desc { font-size: 0.8125rem; font-weight: 500; color: var(--on-surface-variant); line-height: 1.65; width: 100%; transition: all 0.3s ease;}
 
-        .steps { width: 100%; background: rgba(255,255,255,0.50); border-radius: 16px; border: 1px solid rgba(255,255,255,0.60); padding: 1rem; display: flex; flex-direction: column; gap: 0.625rem; text-align: left; }
+        .steps { width: 100%; background: rgba(255,255,255,0.50); border-radius: 16px; border: 1px solid rgba(255,255,255,0.60); padding: 1rem; display: flex; flex-direction: column; gap: 0.625rem; text-align: left; animation: fadeOverlay 0.3s ease-out;}
         .step { display: flex; align-items: flex-start; gap: 0.625rem; font-size: 0.75rem; font-weight: 600; color: var(--on-surface-variant); line-height: 1.5; }
         .step-num { min-width: 22px; height: 22px; border-radius: 50%; background: rgba(0,108,74,0.12); color: var(--primary); font-size: 0.6875rem; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
         .step-icon { width: 16px; height: 16px; fill: var(--primary); flex-shrink: 0; margin-top: 3px; }
 
-        .divider { width: 100%; height: 1px; background: rgba(255,255,255,0.30); }
-        .highlight-text { font-size: 0.9375rem; font-weight: 800; color: #042d1e; }
+        .modal-footer { padding: 1.25rem 2rem 1.5rem; border-top: 1px solid rgba(255,255,255,0.20); display: flex; flex-direction: column; gap: 0.875rem; }
+        
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.625rem;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
 
-        .modal-footer { padding: 1.25rem 2rem 1.5rem; border-top: 1px solid rgba(255,255,255,0.20); display: flex; flex-direction: column; gap: 0.625rem; }
+        .btn-action {
+            width: 100%;
+            padding: 0.75rem 0.4rem;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Manrope', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        .btn-action:hover { opacity: 0.92; } 
+        .btn-action:active { transform: scale(0.98); } 
+        .btn-action:disabled { opacity: 0.55; cursor: not-allowed; }
+
+        .btn-primary { 
+            background: linear-gradient(90deg, #006c4a 0%, #1db983 100%); 
+            box-shadow: 0 8px 24px -6px rgba(0,108,74,0.35); 
+        }
         
-        .btn-primary { width: 100%; padding: 1rem; background: linear-gradient(90deg, #006c4a 0%, #1db983 100%); color: white; border: none; border-radius: 8px; font-family: 'Manrope', sans-serif; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; transition: opacity 0.2s, transform 0.15s; box-shadow: 0 8px 24px -6px rgba(0,108,74,0.35); }
-        .btn-primary:hover { opacity: 0.92; } .btn-primary:active { transform: scale(0.98); } .btn-primary:disabled { opacity: 0.55; cursor: not-allowed; }
-        
-        .btn-skip { width: 100%; padding: 0.625rem; background: transparent; border: none; font-size: 0.6875rem; font-weight: 700; color: var(--tertiary); letter-spacing: 0.10em; text-transform: uppercase; cursor: pointer; opacity: 0.70; transition: opacity 0.2s; }
-        .btn-skip:hover { opacity: 1; }
+        .btn-danger { 
+            background: linear-gradient(90deg, #c75a5a 0%, #e07e7e 100%); 
+            box-shadow: 0 8px 24px -6px rgba(199, 90, 90, 0.35); 
+        }
 
         .redirect-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 1rem; padding: 2rem; min-height: 100dvh; position: relative; z-index: 10; }
         .redirect-screen .spinner { width: 48px; height: 48px; border: 3px solid rgba(0,108,74,0.15); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .redirect-screen p { font-family: 'Manrope', sans-serif; font-size: 0.875rem; font-weight: 600; color: var(--on-surface-variant); letter-spacing: 0.05em; }
         
-        .brand-footer { font-size: 0.625rem; font-weight: 700; letter-spacing: 0.20em; text-transform: uppercase; color: rgba(4,45,30,0.40); margin-top: 0.5rem; }
+        .brand-footer { 
+            font-size: 0.625rem; 
+            font-weight: 700; 
+            letter-spacing: 0.20em; 
+            text-transform: uppercase; 
+            color: rgba(4,45,30,0.40); 
+            margin-top: 0.5rem; 
+            text-align: center; /* Centrado como solicitaste */
+        }
+        
         .hidden { display: none !important; }
     </style>
 </head>
@@ -111,7 +165,7 @@
 </svg>
 
 <div class="redirect-screen hidden" id="redirectScreen">
-    <img src="icon-192.png" alt="Icono" class="app-icon-preview" style="width:72px;height:72px;border-radius:20px;">
+    <img src="icon-192.png" srcset="icon-192.png 1x, icon-512.png 2x" alt="Icono" class="app-icon-preview" style="width:72px;height:72px;border-radius:20px;">
     <div>
         <p style="font-family:'Manrope',sans-serif;font-size:1.1rem;font-weight:800;color:#042d1e;margin-bottom:4px;">Literaturas Bíblicas</p>
         <p style="font-size:0.75rem;color:var(--on-surface-variant);font-weight:500;">Abriendo la plataforma…</p>
@@ -123,22 +177,27 @@
 <div class="modal-overlay hidden" id="modalOverlay">
     <div class="modal" id="modal">
         <div class="modal-body" id="modalBody">
-            <img src="icon-192.png" alt="Icono" class="app-icon-preview">
+            <img src="icon-192.png" srcset="icon-192.png 1x, icon-512.png 2x" alt="Icono" class="app-icon-preview">
+            
             <h2 class="modal-title" id="modalTitle">Añadir a pantalla de inicio</h2>
+            
             <p class="modal-desc" id="modalDesc">
-                Acceda a la plataforma de Literaturas Bíblicas directamente desde su dispositivo, como si fuera una aplicación.
+                Instale esta aplicación en la pantalla principal de su dispositivo para disfrutar de un acceso más rápido, seguro y directo a la plataforma de Literaturas Bíblicas.
             </p>
-            <div class="steps" id="stepsBox"></div>
-            <div class="divider"></div>
-            <p class="highlight-text" id="platformLabel"></p>
+            
+            <!-- Las instrucciones están ocultas inicialmente para no ocupar espacio -->
+            <div class="steps hidden" id="stepsBox"></div>
         </div>
+        
         <div class="modal-footer">
-            <button class="btn-primary" id="btnAction" onclick="handleAction()">
-                AÑADIR A INICIO
-            </button>
-            <button class="btn-skip" onclick="skipAndGo()">
-                Ahora no, continuar sin instalar
-            </button>
+            <div class="action-buttons" id="actionButtons">
+                <button class="btn-action btn-primary" id="btnAction" onclick="handleAction()">
+                    INSTALAR APLICACIÓN
+                </button>
+                <button class="btn-action btn-danger" id="btnSkip" onclick="skipAndGo()">
+                    CONTINUAR SIN INSTALAR
+                </button>
+            </div>
             <p class="brand-footer">• Plataforma Oficial de Distribución Ministerial</p>
         </div>
     </div>
@@ -165,48 +224,36 @@
     const isFirefox = /Firefox/i.test(ua);
     const isSamsungBrowser = /SamsungBrowser/i.test(ua);
 
-    // Detección ESTRICTA de App Instalada
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 
     let deferredPrompt = null;
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;
-        updateButtonForNative();
     });
 
     window.addEventListener('DOMContentLoaded', () => {
-        // ÚNICA regla para saltar: estar abriéndolo como app nativa instalada.
         if (isStandalone) {
             goToApp();
         } else {
-            buildModal();
+            prepareSteps(); // Prepara las instrucciones en memoria, pero no las muestra todavía
             show('modalOverlay');
         }
     });
 
-    function buildModal() {
+    // Esta función genera las instrucciones según el dispositivo
+    function prepareSteps() {
         const stepsBox = document.getElementById('stepsBox');
-        const platformLabel = document.getElementById('platformLabel');
-        const btnAction = document.getElementById('btnAction');
-
         let steps = [];
-        let label = '';
-        let btnText = 'AÑADIR A INICIO';
 
         if (isIOS) {
-            label = 'iOS · Safari';
             if (!isSafari) {
-                label = 'iOS · Abrir en Safari';
-                btnText = 'ABRIR EN SAFARI';
                 steps = [
-                    { text: 'Toca el botón de abajo para abrir esta página en Safari.' },
-                    { text: 'Luego pulsa el ícono Compartir (cuadro con flecha ↑).' },
-                    { text: 'Selecciona "Añadir a pantalla de inicio".' },
-                    { text: 'Confirma tocando "Añadir".' }
+                    { text: 'Esta función de instalación solo está disponible en Safari.' },
+                    { text: 'Toca opciones y copia el enlace de esta página.' },
+                    { text: 'Abre el navegador Safari, pega el enlace e instala desde allí.' }
                 ];
             } else {
-                btnText = 'VER INSTRUCCIONES';
                 steps = [
                     { icon: 'i-share', text: 'Pulsa el ícono Compartir (cuadro con flecha ↑) en la barra inferior.' },
                     { text: 'Desplázate y toca "Añadir a pantalla de inicio".' },
@@ -214,30 +261,19 @@
                 ];
             }
         } else if (isAndroid) {
-            label = 'Android · ' + (isSamsungBrowser ? 'Samsung Internet' : isChrome ? 'Chrome' : isEdge ? 'Edge' : 'Navegador');
-            if (deferredPrompt) {
-                btnText = 'AÑADIR A INICIO AHORA';
-                steps = [
-                    { icon: 'i-android', text: 'Toca el botón de abajo.' },
-                    { text: 'Confirma "Instalar" o "Añadir" en el mensaje del sistema.' },
-                    { text: 'El icono aparecerá en tu pantalla de inicio.' }
-                ];
-            } else if (isSamsungBrowser) {
-                btnText = 'VER INSTRUCCIONES';
+            if (isSamsungBrowser) {
                 steps = [
                     { icon: 'i-more', text: 'Toca el ícono ⋮ (menú) en la esquina inferior derecha.' },
                     { text: 'Selecciona "Añadir a página de inicio".' },
                     { text: 'Confirma tocando "Añadir".' }
                 ];
             } else if (isFirefox) {
-                btnText = 'VER INSTRUCCIONES';
                 steps = [
                     { icon: 'i-more', text: 'Toca el ícono ⋮ (menú) arriba a la derecha.' },
                     { text: 'Selecciona "Instalar" o "Añadir a pantalla de inicio".' },
                     { text: 'Confirma en el diálogo que aparece.' }
                 ];
             } else {
-                btnText = 'VER INSTRUCCIONES';
                 steps = [
                     { icon: 'i-more', text: 'Toca el ícono ⋮ (menú) del navegador.' },
                     { text: 'Busca "Añadir a pantalla de inicio" o "Instalar app".' },
@@ -245,20 +281,13 @@
                 ];
             }
         } else if (isWindows || isMac || isLinux) {
-            const browser = isEdge ? 'Edge' : isChrome ? 'Chrome' : isFirefox ? 'Firefox' : 'Navegador';
-            label = (isWindows ? 'Windows' : isMac ? 'macOS' : 'PC') + ' · ' + browser;
-
             if ((isChrome || isEdge) && !isFirefox) {
-                btnText = deferredPrompt ? 'INSTALAR APLICACIÓN' : 'VER INSTRUCCIONES';
                 steps = [
-                    { icon: 'i-desktop', text: deferredPrompt
-                        ? 'Haz clic en el botón de abajo para instalar directamente.'
-                        : 'En la barra de direcciones busca el ícono de instalación a la derecha.' },
+                    { icon: 'i-desktop', text: 'En la barra de direcciones busca el ícono de instalación a la derecha.' },
                     { text: 'O ve al menú ⋮ → "Guardar e instalar" → "Instalar sitio como app".' },
                     { text: 'La app aparecerá en tu escritorio.' }
                 ];
             } else {
-                btnText = 'VER INSTRUCCIONES';
                 steps = [
                     { icon: 'i-info', text: 'Para una instalación automática usa Chrome o Edge.' },
                     { text: 'Abre esta página en Chrome y busca el ícono de instalar en la barra de direcciones.' },
@@ -266,8 +295,6 @@
                 ];
             }
         } else {
-            label = 'Tu dispositivo';
-            btnText = 'VER INSTRUCCIONES';
             steps = [
                 { icon: 'i-more', text: 'Abre el menú de tu navegador.' },
                 { text: 'Busca la opción "Añadir a pantalla de inicio" o "Instalar".' },
@@ -281,21 +308,13 @@
                 <span>${s.text}</span>
             </div>
         `).join('');
-        platformLabel.textContent = label;
-        btnAction.textContent = btnText;
     }
 
-    function updateButtonForNative() {
-        const btn = document.getElementById('btnAction');
-        if (btn && (isAndroid || (!isIOS && (isWindows || isMac || isLinux)))) {
-            btn.textContent = (isWindows || isMac || isLinux) ? 'INSTALAR APLICACIÓN' : 'AÑADIR A INICIO AHORA';
-            buildModal(); 
-        }
-    }
-
+    // Lógica al presionar "INSTALAR APLICACIÓN"
     async function handleAction() {
         const btn = document.getElementById('btnAction');
 
+        // 1. Si el dispositivo permite instalación automática nativa:
         if (deferredPrompt) {
             btn.disabled = true;
             btn.textContent = 'INSTALANDO…';
@@ -308,24 +327,30 @@
                     setTimeout(goToApp, 1200);
                 } else {
                     btn.disabled = false;
-                    btn.textContent = 'AÑADIR A INICIO';
+                    btn.textContent = 'INSTALAR APLICACIÓN';
                 }
             } catch(e) {
                 btn.disabled = false;
-                btn.textContent = 'AÑADIR A INICIO';
+                btn.textContent = 'INSTALAR APLICACIÓN';
             }
             return;
         }
 
-        if (isIOS && !isSafari) {
-            window.location.href = 'x-web-search://?q=' + encodeURIComponent(location.href);
-            setTimeout(() => {
-                document.getElementById('modalDesc').textContent = 'Copia esta URL y ábrela en Safari: ' + location.href;
-            }, 400);
-            return;
-        }
+        // 2. Si NO permite instalación automática, cambiamos la vista para explicar por qué y mostrar los pasos:
+        
+        // Cambiar título y descripción
+        document.getElementById('modalTitle').textContent = 'Instalación Manual';
+        document.getElementById('modalDesc').innerHTML = '<span style="color:var(--error); font-weight:700;">Su navegador no soporta la instalación automática.</span><br>Por favor, siga estas sencillas instrucciones para añadirla manualmente:';
+        
+        // Mostrar los pasos específicos
+        document.getElementById('stepsBox').classList.remove('hidden');
 
-        skipAndGo();
+        // Ocultar botón de Instalar y hacer que el de Continuar ocupe todo el ancho
+        btn.classList.add('hidden'); 
+        document.getElementById('actionButtons').style.gridTemplateColumns = '1fr'; 
+        
+        const btnSkip = document.getElementById('btnSkip');
+        btnSkip.textContent = 'ENTENDIDO, CONTINUAR SIN INSTALAR';
     }
 
     function skipAndGo() {
