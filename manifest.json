@@ -11,13 +11,13 @@
   "lang": "es",
   "icons": [
     {
-      "src": "icono.svg",
+      "src": "IconoInstalacion.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
     },
     {
-      "src": "icono.svg",
+      "src": "IconoInstalacion.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "maskable"
