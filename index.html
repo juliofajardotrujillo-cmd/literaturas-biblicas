@@ -13,14 +13,13 @@
     <meta name="application-name" content="Lit. Bíblicas" />
     <meta name="theme-color" content="#006c4a" />
 
-    <link rel="apple-touch-icon" href="icon-192.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="icon-192.png" />
+    <link rel="apple-touch-icon" href="icono.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="icono.svg" />
     <link rel="manifest" href="manifest.json" />
-    <link rel="icon" type="image/png" href="icon-192.png" />
+    <link rel="icon" type="image/svg+xml" href="icono.svg" />
 
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
     
-    <!-- Archivo de estilos externo -->
     <link rel="stylesheet" href="style.css" /> 
 </head>
 <body>
@@ -40,7 +39,7 @@
 </svg>
 
 <div class="redirect-screen hidden" id="redirectScreen">
-    <img src="icon-192.png" srcset="icon-192.png 1x, icon-512.png 2x" alt="Icono" class="app-icon-preview">
+    <img src="icono.svg" alt="Icono" class="app-icon-preview">
     <div>
         <p style="font-family:'Manrope',sans-serif;font-size:1.1rem;font-weight:800;color:#042d1e;margin-bottom:4px;">Literaturas Bíblicas</p>
         <p style="font-size:0.75rem;color:var(--on-surface-variant);font-weight:500;">Abriendo la plataforma…</p>
@@ -52,7 +51,7 @@
 <div class="modal-overlay hidden" id="modalOverlay">
     <div class="modal" id="modal">
         <div class="modal-body" id="modalBody">
-            <img src="icon-192.png" srcset="icon-192.png 1x, icon-512.png 2x" alt="Icono" class="app-icon-preview">
+            <img src="icono.svg" alt="Icono" class="app-icon-preview">
             
             <h2 class="modal-title" id="modalTitle">Añadir a pantalla de inicio</h2>
             
@@ -60,7 +59,6 @@
                 Instale esta aplicación en la pantalla principal de su dispositivo para disfrutar de un acceso más rápido, seguro y directo a la plataforma de Literaturas Bíblicas.
             </p>
             
-            <!-- Las instrucciones están ocultas inicialmente para no ocupar espacio -->
             <div class="steps hidden" id="stepsBox"></div>
         </div>
         
